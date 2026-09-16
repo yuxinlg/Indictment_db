@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------
+# Data files over GitHub's 100 MB per-file limit (free accounts).
+# .gitignore can't filter by size, so list each large file here.
+# Find new ones with:  find . -type f -size +100M -not -path './.git/*'
+# ---------------------------------------------------------------
+/起诉书.csv
+
+# ---------------------------------------------------------------
+# OS files
+# ---------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Icon?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Dropbox
+.dropbox
+.dropbox.attr
+.dropbox.cache/
+*conflicted copy*
+
+# ---------------------------------------------------------------
+# Editors / IDEs
+# ---------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cursor/
+
+# ---------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.env
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------------------------------------------------------------
+# R
+# ---------------------------------------------------------------
+.Rhistory
+.RData
+.Rapp.history
+.Rproj.user/
+.Renviron
+
+# ---------------------------------------------------------------
+# Databases, logs, temp files
+# ---------------------------------------------------------------
+*.log
+*.tmp
+*.temp
+*.sqlite-journal
+*.db-journal
+~$*
