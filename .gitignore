@@ -4,6 +4,31 @@
 # Find new ones with:  find . -type f -size +100M -not -path './.git/*'
 # ---------------------------------------------------------------
 /起诉书.csv
+/indictment.csv
+indictment*.csv
+
+# ---------------------------------------------------------------
+# Derived data. All derived products live in ~/indictment_work/
+# (outside Dropbox and git). Nothing below should ever be committed.
+# Exception: small hand-built reference tables in ref/ ARE tracked.
+# ---------------------------------------------------------------
+*.parquet
+*.parquet/
+*.duckdb
+*.duckdb.wal
+*.arrow
+*.feather
+/sensitive*
+/gold/
+/models/
+
+# ---------------------------------------------------------------
+# Third-party source files that must not be redistributed from a
+# public repository (copyrighted standard, unlicensed compilations).
+# See ref/sources/user_supplied/README.md for how to obtain them.
+# ---------------------------------------------------------------
+ref/sources/user_supplied/*.pdf
+ref/sources/user_supplied/*.xlsx
 
 # ---------------------------------------------------------------
 # OS files
