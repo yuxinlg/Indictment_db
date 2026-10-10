@@ -33,6 +33,17 @@ ref/sources/user_supplied/*.xlsx
 /lit/
 
 # ---------------------------------------------------------------
+# Research plans and discussion notes: private, local only.
+# WORKLOG.md stays tracked.
+# ---------------------------------------------------------------
+/条块共谋网络方案v1.md
+/检察文书数据可行性讨论记录.md
+/起诉书研究讨论记录.md
+/users-yuxin-dropbox-indictment-db-md-us-glimmering-creek.md
+/*方案*.md
+/*讨论记录*.md
+
+# ---------------------------------------------------------------
 # OS files
 # ---------------------------------------------------------------
 .DS_Store
