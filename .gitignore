@@ -29,6 +29,8 @@ indictment*.csv
 # ---------------------------------------------------------------
 ref/sources/user_supplied/*.pdf
 ref/sources/user_supplied/*.xlsx
+# Downloaded literature (copyrighted PDFs); keep locally only.
+/lit/
 
 # ---------------------------------------------------------------
 # OS files

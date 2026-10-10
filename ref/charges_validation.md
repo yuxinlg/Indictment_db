@@ -42,10 +42,10 @@ Every string at the 应以…罪追究 and 涉嫌…罪 positions in the 2.4M do
 | method | share of charge mentions |
 |---|---|
 | exact | 84.26% |
-| segmented | 11.63% |
-| normalised | 3.60% |
+| segmented | 11.68% |
+| normalised | 3.63% |
 | partial | 0.01% |
-| unresolved residue | 0.51% |
+| unresolved residue | 0.42% |
 
 exact = the official name as written; segmented = several names in one clause or a selective sub-name (贩卖毒品罪 → 走私、贩卖、运输、制造毒品罪); normalised = wrapper removed (犯有X罪, X犯罪, X罪罪); partial = a clause only part of which could be resolved.
 
@@ -58,23 +58,23 @@ exact = the official name as written; segmented = several names in one clause or
 | XX罪 | 447 |
 | ***罪 | 412 |
 | 贩卖罪 | 407 |
-| 容留他人卖淫罪 | 404 |
-| 贩卖毒品的犯罪 | 373 |
-| 滥发林木罪 | 365 |
 | 危险罪 | 342 |
 | 且系共同罪 | 327 |
-| 容留吸毒罪 | 313 |
 | ****罪 | 308 |
-| 危险驾驶的犯罪 | 295 |
-| 虚开增值税发票罪 | 279 |
-| 盗窃的犯罪 | 277 |
-| 生产、销售不符合安全标准食品罪 | 273 |
-| 虚开用于抵扣税款发票罪 | 242 |
-| 危险方法危害公共安全罪 | 221 |
 | **罪 | 213 |
-| 拒不执行法院判决、裁定罪 | 211 |
 | 毒品犯罪 | 206 |
-| 招收学生徇私舞弊罪 | 190 |
 | 非法持有罪 | 179 |
 | 同一罪 | 175 |
 | 故意罪 | 166 |
+| 非法制造发票罪 | 166 |
+| 环境污染罪 | 163 |
+| 非法占有农用地罪 | 161 |
+| 容留他人罪 | 156 |
+| 故意毁坏公私财物罪 | 155 |
+| 信用卡罪 | 153 |
+| 过失损坏军事通信罪 | 137 |
+| 国有公司人员失职罪 | 134 |
+| 伤害罪 | 133 |
+| 贩毒罪 | 131 |
+| 故意损坏财物罪 | 130 |
+| 生产、销售不符合食品安全标准的食品罪 | 130 |

@@ -312,6 +312,7 @@ VERBS = {"走私", "贩卖", "运输", "制造", "生产", "销售", "提供", "
 # residue list; each maps a form used in practice to the official name.
 MANUAL_ALIASES = {
     "容留他人吸食毒品罪": "容留他人吸毒罪",
+    "容留吸毒罪": "容留他人吸毒罪",
     "非法制造注册商标标识罪": "非法制造、销售非法制造的注册商标标识罪",
     "销售非法制造的注册商标标识罪": "非法制造、销售非法制造的注册商标标识罪",
     "掩饰、隐瞒犯罪所得收益罪": "掩饰、隐瞒犯罪所得、犯罪所得收益罪",
@@ -319,6 +320,36 @@ MANUAL_ALIASES = {
     "帮助伪造证据罪": "帮助毁灭、伪造证据罪",
     "妨碍公务罪": "妨害公务罪",
     "虚开增值税专用发票、用于骗取出口退税、抵押税款发票罪": "虚开增值税专用发票、用于骗取出口退税、抵扣税款发票罪",
+    # typos and colloquial forms seen in the M1 residue list (each ≥ 8 documents in a 4 % sample)
+    "滥发林木罪": "滥伐林木罪",
+    "容留他人卖淫罪": "引诱、容留、介绍卖淫罪",
+    "虚开用于抵扣税款发票罪": "虚开增值税专用发票、用于骗取出口退税、抵扣税款发票罪",
+    "虚开增值税发票罪": "虚开增值税专用发票、用于骗取出口退税、抵扣税款发票罪",
+    "虚开增值税专用发票、用于骗取出口退税、抵扣税款发票罪罪": "虚开增值税专用发票、用于骗取出口退税、抵扣税款发票罪",
+    "危险方法危害公共安全罪": "以危险方法危害公共安全罪",
+    "拒不执行法院判决、裁定罪": "拒不执行判决、裁定罪",
+    "拒不执行法院判决罪": "拒不执行判决、裁定罪",
+    "拒不执行法院裁定罪": "拒不执行判决、裁定罪",
+    "生产、销售不符合安全标准食品罪": "生产、销售不符合安全标准的食品罪",
+    "提供侵入、非法控制计算机信息系统的程序、工具罪": "提供侵入、非法控制计算机信息系统程序、工具罪",
+    "非法侵入他人住宅罪": "非法侵入住宅罪",
+    "故意隐匿、销毁会计凭证、会计账簿罪": "隐匿、故意销毁会计凭证、会计账簿、财务会计报告罪",
+    "故意销毁会计凭证、会计账簿罪": "隐匿、故意销毁会计凭证、会计账簿、财务会计报告罪",
+    "隐匿会计凭证、会计账簿罪": "隐匿、故意销毁会计凭证、会计账簿、财务会计报告罪",
+    "生产、销售假冒伪劣产品罪": "生产、销售伪劣产品罪",
+    "销售假冒伪劣产品罪": "生产、销售伪劣产品罪",
+    "过失损坏军事通信罪": "过失损坏武器装备、军事设施、军事通信罪",
+    "招收学生徇私舞弊罪": "招收公务员、学生徇私舞弊罪",
+    "招收公务员徇私舞弊罪": "招收公务员、学生徇私舞弊罪",
+    "非法持有、私藏枪支罪": "非法持有、私藏枪支、弹药罪",
+    "非法持有、私藏弹药罪": "非法持有、私藏枪支、弹药罪",
+    "组织、领导、参加黑社会性质组织罪": "组织、领导、参加黑社会性质组织罪",
+    "妨害信用卡管理秩序罪": "妨害信用卡管理罪",
+    "强制猥亵、侮辱妇女罪": "强制猥亵、侮辱罪",
+    "强制猥亵妇女、儿童罪": "强制猥亵、侮辱罪",
+    "盗窃、抢夺枪支罪": "盗窃、抢夺枪支、弹药、爆炸物、危险物质罪",
+    "非法买卖、储存危险物质罪": "非法制造、买卖、运输、储存危险物质罪",
+    "贪污贿赂罪": "贪污罪",
 }
 
 
@@ -412,16 +443,16 @@ def expand_selective(name: str):
 
 
 def normalise_raw(s: str) -> str:
-    s = re.sub(r"^(犯有|犯了|犯|了|构成|系|涉嫌)", "", s)
-    s = re.sub(r"罪(罪|共同犯罪|的共同犯罪|既遂|未遂|中止|预备)$", "罪", s)
+    s = re.sub(r"^(分别以|均以|依法以|以|犯有|犯了|犯|了|构成|系|涉嫌|被告人)+", "", s)
+    s = re.sub(r"罪(罪|共同犯罪|的共同犯罪|既遂|未遂|中止|预备|\(未遂\)|（未遂）)$", "罪", s)
+    s = re.sub(r"的犯罪$", "罪", s)
     return s.replace("帐", "账")
 
 
-def build_aliases(rows):
-    import duckdb
-
-    std_names = {r["charge_std"] for r in rows}
-    D = {}      # 、-insensitive form -> canonical standard name
+def build_dictionary(std_names):
+    """、-insensitive form -> canonical standard name: official names, selective sub-names,
+    bracket variants and MANUAL_ALIASES. Shared by the alias build and by M1 extraction."""
+    D = {}
     for n in std_names:
         D.setdefault(n.replace("、", ""), n)
     n_sel = 0
@@ -433,19 +464,14 @@ def build_aliases(rows):
     for a, n in MANUAL_ALIASES.items():
         if n in std_names:
             D.setdefault(a.replace("、", ""), n)
+    return D, n_sel
+
+
+def make_segmenter(D):
+    """Longest-match over D on a 、-stripped string. Returns a function t -> (names, residue_or_None)."""
     maxlen = max(len(k) for k in D)
-    con = duckdb.connect()
-    con.execute(f"CREATE VIEW raw AS SELECT * FROM read_parquet('{PARQUET}', hive_partitioning=true)")
-    q = r"""
-      SELECT stage, s, count(*) n FROM (
-        SELECT '应以' AS stage, unnest(regexp_extract_all(content, '应当?以([^，。；：\s（）()]{1,80}?罪)追究', 1)) AS s FROM raw
-        UNION ALL
-        SELECT '涉嫌', unnest(regexp_extract_all(content, '涉嫌([^，。；：\s（）()]{1,60}?罪)', 1)) FROM raw
-      ) GROUP BY 1, 2"""
-    strings = con.execute(q).fetchall()
 
     def segment(t: str):
-        """Longest-match over D on a 、-stripped string. Returns (names, residue_or_None)."""
         i, found = 0, []
         while i < len(t):
             if t[i] in "，,和及与或":
@@ -464,29 +490,62 @@ def build_aliases(rows):
             found.append(D[hit]); i += len(hit)
         return found, None
 
-    alias_rows, unmatched = [], Counter()
-    for stage, s, n in strings:
-        best = None
-        variants = [(s, "exact"), (normalise_raw(s), "normalised")]
-        if re.search(r"犯罪$", normalise_raw(s)):                       # 盗窃犯罪 -> 盗窃罪, tried last so that
-            variants.append((re.sub(r"犯罪$", "罪", normalise_raw(s)), "normalised"))  # 掩饰、隐瞒犯罪 keeps its truncation match
-        if "、" in s and s.endswith("罪"):
-            pieces = [pc if pc.endswith("罪") else pc + "罪" for pc in s[:-1].split("、")]
+    return segment
+
+
+def resolve_charge_string(s: str, D, segment):
+    """Resolve one raw charge string. Returns (names, residue_or_None, method) or None when nothing
+    at all could be matched. method in exact | segmented | normalised; a non-None residue means
+    the string was only partially resolved."""
+    best = None
+    variants = [(s, "exact"), (normalise_raw(s), "normalised")]
+    if re.search(r"犯罪$", normalise_raw(s)):                       # 盗窃犯罪 -> 盗窃罪, tried last so that
+        variants.append((re.sub(r"犯罪$", "罪", normalise_raw(s)), "normalised"))  # 掩饰、隐瞒犯罪 keeps its truncation match
+    # "A、B罪" = two charges sharing one 罪 (抢劫、盗窃罪); tried on the raw and on the normalised forms
+    for v, _m in list(variants):
+        if "、" in v and v.endswith("罪"):
+            pieces = [pc if pc.endswith("罪") else pc + "罪" for pc in v[:-1].split("、")]
             if all(pc.replace("、", "") in D for pc in pieces) and len(pieces) > 1:
                 variants.insert(1, ("，".join(pieces), "segmented"))
-        for variant, method in variants:
-            found, residue = segment(variant.replace("、", ""))
-            if found and residue is None:
-                best = (found, None, method); break
-            if found and (best is None or (best[1] is not None and len(residue) < len(best[1]))):
-                best = (found, residue, method)
-        if best is None:
+                break
+    for variant, method in variants:
+        found, residue = segment(variant.replace("、", ""))
+        if found and residue is None:
+            best = (found, None, method); break
+        if found and (best is None or (best[1] is not None and len(residue) < len(best[1]))):
+            best = (found, residue, method)
+    if best is None:
+        return None
+    found, residue, method = best
+    if len(found) == 1 and found[0] == s:
+        method = "exact"
+    elif residue is None and method == "exact":
+        method = "segmented"
+    return found, residue, method
+
+
+def build_aliases(rows):
+    import duckdb
+
+    std_names = {r["charge_std"] for r in rows}
+    D, n_sel = build_dictionary(std_names)
+    segment = make_segmenter(D)
+    con = duckdb.connect()
+    con.execute(f"CREATE VIEW raw AS SELECT * FROM read_parquet('{PARQUET}', hive_partitioning=true)")
+    q = r"""
+      SELECT stage, s, count(*) n FROM (
+        SELECT '应以' AS stage, unnest(regexp_extract_all(content, '应当?以([^，。；：\s（）()]{1,80}?罪)追究', 1)) AS s FROM raw
+        UNION ALL
+        SELECT '涉嫌', unnest(regexp_extract_all(content, '涉嫌([^，。；：\s（）()]{1,60}?罪)', 1)) FROM raw
+      ) GROUP BY 1, 2"""
+    strings = con.execute(q).fetchall()
+
+    alias_rows, unmatched = [], Counter()
+    for stage, s, n in strings:
+        res = resolve_charge_string(s, D, segment)
+        if res is None:
             unmatched[s] += n; continue
-        found, residue, method = best
-        if len(found) == 1 and found[0] == s:
-            method = "exact"
-        elif residue is None and method == "exact":
-            method = "segmented"
+        found, residue, method = res
         if residue is None:
             alias_rows.append((s, "|".join(found), method, stage, n))
         else:
